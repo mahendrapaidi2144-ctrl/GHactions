@@ -1,0 +1,46 @@
+# Give this workflow a short name that appears in GitHub Actions.
+name: "CI"
+
+# Choose which GitHub events start this workflow.
+on:
+  # Start the workflow when someone pushes a commit.
+  push:
+    # Only start for pushes to the main branch.
+    branches:
+      # The branch name to watch for pushes.
+      - main
+  # Also let someone start the workflow manually from GitHub.
+  workflow_dispatch:
+
+# Define the work that GitHub Actions should perform.
+jobs:
+  # Name this single job "build".
+  build:
+    # Run this job on a fresh Ubuntu virtual machine.
+    runs-on: ubuntu-latest
+    # List the actions to perform, in order.
+    steps:
+      # Download the repository files onto the virtual machine.
+      - name: Check out the code
+        # Use the official checkout action, version 4.
+        uses: actions/checkout@v4
+      # Install the selected version of Python.
+      - name: Set up Python 3.12
+        # Use the official setup-python action, version 5.
+        uses: actions/setup-python@v5
+        # Set the Python version for the action to install.
+        with:
+          # Install Python 3.12.
+          python-version: "3.12"
+      # Install the packages listed in the project's dependency file.
+      - name: Install dependencies
+        # Run this command in the virtual machine's shell.
+        run: pip install -r requirements.txt
+      # Run the project's automated tests with pytest.
+      - name: Run tests
+        # Run this command in the virtual machine's shell.
+        run: pytest
+      # Show which commit and GitHub user caused this run.
+      - name: Show commit and pusher
+        # Print the commit SHA and the GitHub actor who triggered the workflow.
+        run: echo "Commit ${{ github.sha }} was pushed by ${{ github.actor }}"
