@@ -31,7 +31,7 @@ jobs:
         # Set the Python version for the action to install.
         with:
           # Install Python 3.12.
-          python-version: "3.12"
+          python-version: "3.xyz"
       # Install the packages listed in the project's dependency file.
       - name: Install dependencies
         # Run this command in the virtual machine's shell.
